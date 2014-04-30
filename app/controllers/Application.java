@@ -1,6 +1,10 @@
 package controllers;
 
 import java.util.Collection;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import play.libs.Json;
 import play.mvc.Controller;
@@ -47,6 +51,26 @@ public class Application extends Controller {
     	catch(RuntimeException e) {
     		return notFound();
     	}
+    }
+    
+    public static Result agregarLibro() {
+    	Libro nuevo = Json.fromJson(request().body().asJson(), Libro.class);
+    	Biblioteca.getInstance().agregarLibro(nuevo.getTitulo(), nuevo.getAutor());
+    	return ok("OK");
+    }
+    
+    public static Result actualizar(int id) {
+    	Libro actualizado = Json.fromJson(request().body().asJson(), Libro.class);
+    	if (id != actualizado.getId()) {
+    		return badRequest("Id en URL distinto del cuerpo");
+    	}
+    	Biblioteca.getInstance().actualizarLibro(actualizado);
+    	return ok("OK");
+    }
+    
+    public static Result buscar(String titulo) {
+    	List<Libro> libros = Biblioteca.getInstance().buscar(titulo);
+    	return ok(Json.toJson(libros));
     }
 
 }
