@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" ng-app="librosApp">
+<head>
+  <meta charset="utf-8">
+  <title>Ejemplo de Libros en Angular</title>
+    <link rel="stylesheet" href="css/app.css"/>
+	
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
+<body ng-controller="TodosLosLibrosCtrl">
+	
+<div class="navbar-header">
+    <a class="navbar-brand" rel="home" href="#" title="Libros"><img style="max-width:100px; margin-top: -7px;" src="images/logo-libros.jpg"></a>
+</div>
+	
+<div class="container">
+	<div class="row">
+		<h1 style="padding-bottom:25px">Libros Angular + Play2</h1>
+	</div>
+	
+	<div class="row">
+		<!-- Busqueda y resultados -->
+		<div class="col-md-8">
+			<div class="filtro">
+					<form role="form">
+						<div class="form-group">
+							<label for="libroBuscado">Buscar</span> 
+							<input ng-model="libroBuscado" class="form-control" id="libroBuscado" placeholder="Titulo o Autor">
+						</div>
+					</form>
+				</div>
+			<div class="table-responsive">
+			 <table class="table table-striped table-hover table-condensed">
+			 	<tbody>
+				 	<tr>
+				 		<th>#</th>
+				 		<th>Titulo</th>
+				 		<th>Autor</th>
+				 		<th>&nbsp;</th>
+				 	</tr>
+					<tr ng-repeat="libro in libros | filter:libroBuscado">
+						<td>{{libro.id}}</td>
+						<td>{{libro.titulo}}</td>
+						<td>{{libro.autor}}</td>
+						<td>
+							<button type="button" class="btn btn-default" data-ng-click="verDetalle(libro)">Ver</button>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarLibroModal">Editar</button>
+							<button class="btn btn-danger" data-ng-click="eliminar(libro.id);">Eliminar</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<!-- Editar/Agregar -->
+		<div>
+			<h2>Agregar Libro</h2>
+			<div>
+				<form name="agregarLibroForm" role="form">
+			  	<fieldset>
+				    <div class="form-group">
+			    	  	<label for="titulo">Titulo</label>
+			      		<input data-ng-model="nuevoLibro.titulo" type="text" id="titulo" class="form-control" placeholder="Cien Años de Soledad">
+			    	</div>
+			    	<div class="form-group">
+			      		<label for="autor">Autor</label>
+			      		<input data-ng-model="nuevoLibro.autor" type="text" id="disabledTextInput" class="form-control" placeholder="Gabriel García Marquez">
+			    	</div>
+			    	<button type="submit" class="btn btn-primary" data-ng-click="agregarLibro()">Guardar</button>
+			    	
+                    <p class="message bg-danger" ng-repeat="error in errors">{{error}}</p>
+	                <p class="message bg-success" ng-repeat="msg in msgs">{{msg}}</p>
+			  	</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+  <!-- Agregamos angular para que funcione  -->
+  <script src="lib/angular.js"></script>
+  
+  <!-- Importamos los archivos extras que vamos a usar -->
+  <script src="js/app.js"></script>  
+  <script src="js/controllers.js"></script>  
+
+
+<!-- MODEL WINDOW PARA EDITAR UN LIBRO -->
+<div id="verLibroModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+        <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h2>{{libroSeleccionado.titulo}}</h2>
+			</div>	
+			<div class="modal-body">
+				<p>{{libroSeleccionado.autor}}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="editarLibroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Modal Body</h3>
+                <p class="bg-warning">AUN NO IMPLEMENTADO!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+

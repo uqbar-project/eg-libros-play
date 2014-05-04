@@ -3,8 +3,7 @@ package controllers;
 import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 
 import play.libs.Json;
 import play.mvc.Controller;
@@ -12,6 +11,8 @@ import play.mvc.Result;
 import uqbar.libros.domain.Biblioteca;
 import uqbar.libros.domain.Libro;
 import views.html.index;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Controller del servicio backend.
@@ -55,8 +56,17 @@ public class Application extends Controller {
     
     public static Result agregarLibro() {
     	Libro nuevo = Json.fromJson(request().body().asJson(), Libro.class);
-    	Biblioteca.getInstance().agregarLibro(nuevo.getTitulo(), nuevo.getAutor());
-    	return ok("OK");
+    	// esta validacion deberia estar en el dominio y lanzar UserException.
+    	if (StringUtils.isEmpty(nuevo.getTitulo())) {
+    		ObjectNode result = Json.newObject();
+    		result.put("error", "titulo es requerido");
+    		return badRequest(result);
+    	}
+    	nuevo = Biblioteca.getInstance().agregarLibro(nuevo.getTitulo(), nuevo.getAutor());
+
+    	ObjectNode result = Json.newObject();
+    	result.put("id", nuevo.getId());
+    	return ok(result);
     }
     
     public static Result actualizar(int id) {
