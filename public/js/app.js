@@ -1,4 +1,4 @@
 'use strict';
 
-angular.module('librosApp', [ ])
+angular.module('librosApp', [])
 

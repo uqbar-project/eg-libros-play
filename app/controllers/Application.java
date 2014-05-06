@@ -3,7 +3,7 @@ package controllers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.uqbar.commons.model.UserException;
 
 import play.libs.Json;
 import play.mvc.Controller;
@@ -39,7 +39,7 @@ public class Application extends Controller {
     	try {
     		return ok(Json.toJson(Biblioteca.getInstance().getLibro(id)));
     	}
-    	catch(RuntimeException e) {
+    	catch (UserException e) {
     		return notFound();
     	}
     }
@@ -49,24 +49,26 @@ public class Application extends Controller {
     		Biblioteca.getInstance().eliminarLibro(id);
     		return ok("OK");
     	}
-    	catch(RuntimeException e) {
+    	catch (UserException e) {
     		return notFound();
     	}
     }
     
     public static Result agregarLibro() {
-    	Libro nuevo = Json.fromJson(request().body().asJson(), Libro.class);
-    	// esta validacion deberia estar en el dominio y lanzar UserException.
-    	if (StringUtils.isEmpty(nuevo.getTitulo())) {
+    	try {
+    		Libro nuevo = Json.fromJson(request().body().asJson(), Libro.class);
+    		nuevo.validar();
+    		nuevo = Biblioteca.getInstance().agregarLibro(nuevo.getTitulo(), nuevo.getAutor());
+    		
     		ObjectNode result = Json.newObject();
-    		result.put("error", "titulo es requerido");
+    		result.put("id", nuevo.getId());
+    		return ok(result);
+    	}
+    	catch (UserException e) {
+    		ObjectNode result = Json.newObject();
+    		result.put("error", e.getMessage());
     		return badRequest(result);
     	}
-    	nuevo = Biblioteca.getInstance().agregarLibro(nuevo.getTitulo(), nuevo.getAutor());
-
-    	ObjectNode result = Json.newObject();
-    	result.put("id", nuevo.getId());
-    	return ok(result);
     }
     
     public static Result actualizar(int id) {

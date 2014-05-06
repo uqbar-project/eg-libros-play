@@ -10,6 +10,7 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
+
 <body ng-controller="TodosLosLibrosCtrl">
 	
 <div class="navbar-header">
@@ -17,10 +18,11 @@
 </div>
 	
 <div class="container">
-	<div class="row">
-		<h1 style="padding-bottom:25px">Libros Angular + Play2</h1>
+
+	<div class="page-header">
+	  <h1>Librer&iacute;a RIA <small>AngularJS + Play2</small></h1>
 	</div>
-	
+
 	<div class="row">
 		<!-- Busqueda y resultados -->
 		<div class="col-md-8">
@@ -41,7 +43,7 @@
 				 		<th>Autor</th>
 				 		<th>&nbsp;</th>
 				 	</tr>
-					<tr ng-repeat="libro in libros | filter:libroBuscado">
+					<tr ng-repeat="libro in libros | filter:libroBuscado" data-ng-click="verDetalle(libro)">
 						<td>{{libro.id}}</td>
 						<td>{{libro.titulo}}</td>
 						<td>{{libro.autor}}</td>
@@ -56,7 +58,7 @@
 			</div>
 		</div>
 		<!-- Editar/Agregar -->
-		<div>
+		<div class="col-md-4 well well-lg">
 			<h2>Agregar Libro</h2>
 			<div>
 				<form name="agregarLibroForm" role="form">
@@ -71,8 +73,10 @@
 			    	</div>
 			    	<button type="submit" class="btn btn-primary" data-ng-click="agregarLibro()">Guardar</button>
 			    	
-                    <p class="message bg-danger" ng-repeat="error in errors">{{error}}</p>
-	                <p class="message bg-success" ng-repeat="msg in msgs">{{msg}}</p>
+			    	<div style="padding-top:10px">
+                    	<div class="alert alert-danger" ng-repeat="error in errors">{{error}}</div>
+	                	<p class="message bg-success" ng-repeat="msg in msgs">{{msg}}</p>
+	                </div>
 			  	</fieldset>
 				</form>
 			</div>
@@ -80,14 +84,6 @@
 	</div>
 	
 </div>
-
-  <!-- Agregamos angular para que funcione  -->
-  <script src="lib/angular.js"></script>
-  
-  <!-- Importamos los archivos extras que vamos a usar -->
-  <script src="js/app.js"></script>  
-  <script src="js/controllers.js"></script>  
-
 
 <!-- MODEL WINDOW PARA EDITAR UN LIBRO -->
 <div id="verLibroModal" class="modal fade" role="dialog">
@@ -122,6 +118,13 @@
     </div>
   </div>
 </div>
+
+  <!-- Agregamos angular para que funcione  -->
+  <script src="lib/angular.js"></script>
+  
+  <!-- Importamos los archivos extras que vamos a usar -->
+  <script src="js/app.js"></script>  
+  <script src="js/controllers.js"></script>
 
 </body>
 </html>
