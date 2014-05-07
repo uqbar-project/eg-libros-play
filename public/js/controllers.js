@@ -1,53 +1,76 @@
 'use strict';
 
-var app = angular.module('librosApp', []);
+var app = angular.module('librosApp', ['ngAnimate']);
 
 /* Controllers */
-app.controller('TodosLosLibrosCtrl', function ($scope, $http) {
+app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
+	
     $scope.actualizarLista = function() {
     	$http.get('/libros').success(function(data) {
             $scope.libros = data;    
         })
     	
     }
+    
     $scope.actualizarLista();
 
     // AGREGAR
-    $scope.errors = [];
-    $scope.msgs = [];
     $scope.agregarLibro = function() {
     	$http.post('/libros', $scope.nuevoLibro).success(function(data, status, headers, config) {
             if (data.msg != '') {
-            	var id = data.id
-                $scope.msgs.push('Libro agregado con id:' + id);
+            	$scope.notificarMensaje('Libro agregado con id:' + data.id);
             }
             else {
-                $scope.errors.push(data.error);
+            	$scope.notificarError(data.error);
             }
             $scope.actualizarLista();
         }).error(function(data, status) { 
         	if (data.error) {
-        		$scope.errors.push("Error: " + data.error);
+        		$scope.notificarError("Error: " + data.error);
         	}
         	else {
-        		$scope.errors.push(status + ": " + data);
+        		$scope.notificarError(status + ": " + data);
         	}
         });
     }
-
+    
     // ELIMINAR
-    $scope.eliminar = function(idLibro) {
-    	$http.delete('/libros/' + idLibro).success(function(data, status) {
-    		$scope.msgs.push('Libro eliminado!');
-    		$scope.actualizarLista();
+    $scope.eliminar = function(libro) {
+    	var mensaje = "Seguro quiere eliminar '" + libro.titulo + "'?"
+    	bootbox.confirm(mensaje, function(confirma) {
+    		if (confirma) {
+    			$http.delete('/libros/' + libro.id).success(function(data, status) {
+    	    		$scope.notificarMensaje('Libro eliminado!');
+    	    		$scope.actualizarLista();
+    	    	});
+    		}
     	});
     }
     
-    // ver detalle
+    // VER DETALLE
     $scope.libroSeleccionado = null;
     $scope.verDetalle = function(libro) {
         $scope.libroSeleccionado = libro;
         $("#verLibroModal").modal({});
+    }
+    
+	// FEEDBACK & ERRORES
+	$scope.msgs = [];
+	$scope.notificarMensaje = function(mensaje) {
+		$scope.msgs.push(mensaje);
+		$timeout(function(){
+			while($scope.msgs.length > 0) 
+				$scope.msgs.pop();
+	    }, 3000);
+	};
+
+	$scope.errors = [];
+    $scope.notificarError = function(mensaje) {
+    	$scope.errors.push(mensaje);
+		$timeout(function(){
+			while($scope.errors.length > 0) 
+				$scope.errors.pop();
+	    }, 3000);
     }
     
 });
