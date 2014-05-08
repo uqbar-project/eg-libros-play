@@ -7,16 +7,16 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
 	
     $scope.actualizarLista = function() {
     	$http.get('/libros').success(function(data) {
-            $scope.libros = data;    
+            $scope.libros = data;
         })
-    	
     }
     
     $scope.actualizarLista();
 
     // AGREGAR
     $scope.agregarLibro = function() {
-    	$http.post('/libros', $scope.nuevoLibro).success(function(data, status, headers, config) {
+    	$http.post('/libros', $scope.nuevoLibro)
+    	.success(function(data) {
             if (data.msg != '') {
             	$scope.notificarMensaje('Libro agregado con id:' + data.id);
             }
@@ -24,7 +24,8 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
             	$scope.notificarError(data.error);
             }
             $scope.actualizarLista();
-        }).error(function(data, status) { 
+        }
+    	).error(function(data, status) { 
         	if (data.error) {
         		$scope.notificarError("Error: " + data.error);
         	}
@@ -39,7 +40,7 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
     	var mensaje = "Seguro quiere eliminar '" + libro.titulo + "'?"
     	bootbox.confirm(mensaje, function(confirma) {
     		if (confirma) {
-    			$http.delete('/libros/' + libro.id).success(function(data, status) {
+    			$http.delete('/libros/' + libro.id).success(function() {
     	    		$scope.notificarMensaje('Libro eliminado!');
     	    		$scope.actualizarLista();
     	    	});
