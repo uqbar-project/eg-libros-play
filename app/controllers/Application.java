@@ -6,12 +6,12 @@ import java.util.List;
 import org.uqbar.commons.model.UserException;
 
 import play.libs.Json;
-import play.mvc.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
 import uqbar.libros.domain.Biblioteca;
 import uqbar.libros.domain.Libro;
-import views.html.index;
+
+import actions.Delayed;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * 
  * @author jfernandes
  */
+@Delayed
 public class Application extends Controller {
   
     public static Result libros() {

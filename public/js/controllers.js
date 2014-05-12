@@ -1,9 +1,18 @@
 'use strict';
 
-var app = angular.module('librosApp', ['ngAnimate']);
+var app = angular.module('librosApp', ['ngAnimate', 'chieffancypants.loadingBar']);
 
 /* Controllers */
-app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
+app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout, cfpLoadingBar) {
+	
+	$scope.start = function() {
+      cfpLoadingBar.start();
+    };
+
+    $scope.complete = function () {
+      cfpLoadingBar.complete();
+    };
+	
 	
     $scope.actualizarLista = function() {
     	$http.get('/libros').success(function(data) {
@@ -24,6 +33,7 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
             	$scope.notificarError(data.error);
             }
             $scope.actualizarLista();
+            $scope.nuevoLibro = null;
         }
     	).error(function(data, status) { 
         	if (data.error) {
