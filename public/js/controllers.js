@@ -55,6 +55,27 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout) {
         $("#verLibroModal").modal({});
     }
     
+    // EDITAR LIBRO
+    $scope.editarLibro = function(libro) {
+    	$scope.libroSeleccionado = libro;
+    	$("#editarLibroModal").modal({});
+    }
+    $scope.guardarLibro = function() {
+    	$http.put('/libros/' + $scope.libroSeleccionado.id, $scope.libroSeleccionado)
+    		.success(function() {
+    			$scope.notificarMensaje('Libro actualizado!');
+    			$scope.actualizarLista();
+    		})
+    		.error(function(data, status) { 
+    			if (data.error)
+    				$scope.notificarError("Error: " + data.error);
+    			else
+    				$scope.notificarError(status + ": " + data);
+    		});
+    	$scope.libroSeleccionado = null;
+    	$("#editarLibroModal").modal('toggle');
+    }
+    
 	// FEEDBACK & ERRORES
 	$scope.msgs = [];
 	$scope.notificarMensaje = function(mensaje) {

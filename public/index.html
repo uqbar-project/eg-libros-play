@@ -70,7 +70,7 @@
 						<td>{{libro.autor}}</td>
 						<td nowrap>
 							<button type="button" class="btn btn-default" data-ng-click="verDetalle(libro)">Ver</button>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarLibroModal">Editar</button>
+							<button type="button" class="btn btn-primary" data-ng-click="editarLibro(libro)">Editar</button>
 							<button class="btn btn-danger" data-ng-click="eliminar(libro);">Eliminar</button>
 						</td>
 					</tr>
@@ -125,21 +125,37 @@
         <div class="modal-content">
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            <h4 class="modal-title" id="myModalLabel">Editar Libro</h4>
             </div>
             <div class="modal-body">
-                <h3>Modal Body</h3>
-                <p class="bg-warning">AUN NO IMPLEMENTADO!</p>
+                <h3>"{{libroSeleccionado.titulo}}", de <i>{{libroSeleccionado.autor}}</i></h3>
+                <form name="editarLibroForm" role="form">
+			  	<fieldset>
+				    <div class="form-group">
+			    	  	<label for="titulo">Titulo</label>
+			      		<input data-ng-model="libroSeleccionado.titulo" type="text" class="form-control">
+			    	</div>
+			    	<div class="form-group">
+			      		<label for="autor">Autor</label>
+			      		<input data-ng-model="libroSeleccionado.autor" type="text" class="form-control">
+			    	</div>
+	
+			    	<div class="example-animate-container" style="padding-top:10px">
+                    	<div class="alert alert-danger animate-repeat" ng-repeat="error in errors">{{error}}</div>
+	                </div>
+			  	</fieldset>
+				</form>
+                
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-ng-click="guardarLibro()">Guardar</button>
         </div>
     </div>
   </div>
 </div>
 
-  <!-- Importamos los archivos extras que vamos a usar -->
+  <!-- nuestro jscript -->
   <script src="js/app.js"></script>  
   <script src="js/controllers.js"></script>
 
