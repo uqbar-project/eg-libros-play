@@ -16,7 +16,7 @@ object ApplicationBuild extends Build {
   
   val main = play.Project(appName, appVersion, appDependencies).settings(
       // Add your own project settings here
-      resolvers += ("Local Maven" at "file:///opt/dev/data/maven/repo/"),
+      resolvers += ("Local Maven" at "file:///Users/jfernandes/dev/data/maven-repo/"),
       javacOptions in Compile ++= Seq("-source", "1.6", "-target", "1.6")
   )
   
