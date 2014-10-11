@@ -17,6 +17,8 @@ object ApplicationBuild extends Build {
   val main = play.Project(appName, appVersion, appDependencies).settings(
       // Add your own project settings here
       resolvers += ("Local Maven" at "file:///Users/jfernandes/dev/data/maven-repo/"),
+      resolvers += ("Uqbar Releases" at "http://uqbar-wiki.org/mvn/releases"),
+      resolvers += ("Uqbar Snapshots" at "http://uqbar-wiki.org/mvn/snapshots"),
       javacOptions in Compile ++= Seq("-source", "1.6", "-target", "1.6")
   )
   

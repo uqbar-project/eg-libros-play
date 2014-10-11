@@ -2,22 +2,18 @@
 
 var app = angular.module('librosApp', ['ngAnimate', 'chieffancypants.loadingBar']);
 
+
+
+
 /* Controllers */
 app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout, cfpLoadingBar) {
 	
-	$scope.start = function() {
-      cfpLoadingBar.start();
-    };
-
-    $scope.complete = function () {
-      cfpLoadingBar.complete();
-    };
-	
-	
     $scope.actualizarLista = function() {
-    	$http.get('/libros').success(function(data) {
-            $scope.libros = data;
-        })
+    	$http.get('/libros')
+    		.success(function(data) {
+    			$scope.libros = data;
+    		}
+    	)
     }
     
     $scope.actualizarLista();
@@ -70,6 +66,7 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout, cfpLoadi
     	$scope.libroSeleccionado = libro;
     	$("#editarLibroModal").modal({});
     }
+    
     $scope.guardarLibro = function() {
     	$http.put('/libros/' + $scope.libroSeleccionado.id, $scope.libroSeleccionado)
     		.success(function() {
@@ -90,6 +87,7 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout, cfpLoadi
 	$scope.msgs = [];
 	$scope.notificarMensaje = function(mensaje) {
 		$scope.msgs.push(mensaje);
+		
 		$timeout(function(){
 			while($scope.msgs.length > 0) 
 				$scope.msgs.pop();
@@ -104,5 +102,5 @@ app.controller('TodosLosLibrosCtrl', function ($scope, $http, $timeout, cfpLoadi
 				$scope.errors.pop();
 	    }, 3000);
     }
-    
+
 });

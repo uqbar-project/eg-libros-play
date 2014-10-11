@@ -31,7 +31,8 @@ public class Application extends Controller {
     public static Result libros() {
     	response().setContentType("application/json");
     	Collection<Libro> libros = Biblioteca.getInstance().todasLasInstancias();
-    	return ok(Json.toJson(libros));
+    	JsonNode json = Json.toJson(libros);
+		return ok(json);
     }
     
     public static Result libro(int id) {
